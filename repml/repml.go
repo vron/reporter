@@ -165,7 +165,7 @@ func (r *Report) Heading(str ...interface{}) *Report {
 	switch r.s.peek() {
 	case s_body, s_head1, s_head2, s_head3, s_head4, s_head5:
 		r.ws("<h" + strconv.Itoa(int(r.s.peek()+1)) + ">")
-		r.ws(html.EscapeString(fmt.Sprint(str)))
+		r.ws(html.EscapeString(fmt.Sprint(str...)))
 		r.ws("</h" + strconv.Itoa(int(r.s.peek()+1)) + ">\n")
 	default:
 		r.seterr(errors.New("Can only create heading in text mode " + strconv.Itoa(int(r.s.peek()))))
@@ -176,7 +176,7 @@ func (r *Report) Paragraph(str ...interface{}) *Report {
 	switch r.s.peek() {
 	case s_body, s_head1, s_head2, s_head3, s_head4, s_head5:
 		r.ws("<p>")
-		r.ws(html.EscapeString(fmt.Sprint(str)))
+		r.ws(html.EscapeString(fmt.Sprint(str...)))
 		r.ws("</p>\n")
 	default:
 		r.seterr(errors.New("Can only create paragraph in text mode"))
@@ -187,7 +187,7 @@ func (r *Report) Caption(str ...interface{}) *Report {
 	switch r.s.peek() {
 	case s_fig:
 		r.ws("<figcaption>")
-		r.ws(html.EscapeString(fmt.Sprint(str)))
+		r.ws(html.EscapeString(fmt.Sprint(str...)))
 		r.ws("</figcaption>\n")
 	default:
 		r.seterr(errors.New("Caption is only supported inside image"))
