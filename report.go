@@ -2,7 +2,7 @@ package report
 
 import (
 	"io"
-	"report/repml"
+	"github.com/vron/report/repml"
 )
 
 // A Report object is the object that things to include in the 
