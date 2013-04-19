@@ -23,7 +23,7 @@ type Report interface {
 	// Add a paragraph with text
 	Paragraph(string) Report
 	// Add a caption to the current context
-	Caption(string) Report
+	Caption(...interface{}) Report
 
 	// Return nil if all is ok, otherwise the first generated error
 	IsError() error
