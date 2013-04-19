@@ -1,8 +1,5 @@
 package report
 
-import (
-	"io"
-)
 
 // A Report object is the object that things to include in the 
 // report is added to. If an error occurse when writing the
