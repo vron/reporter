@@ -2,7 +2,6 @@ package report
 
 import (
 	"io"
-	"github.com/vron/reporter/repml"
 )
 
 // A Report object is the object that things to include in the 
@@ -30,10 +29,4 @@ type Report interface {
 
 	// Called at the end to add any mandatory ending, maybe defer this?
 	Finish() error
-}
-
-// Create a new report writing to specified writer, defaults
-// to a html5 reporter.
-func New(w io.Writer, title string) Report {
-	return repml.New(w,title)
 }
