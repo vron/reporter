@@ -7,6 +7,7 @@ import (
 	"html"
 	"io"
 	"strconv"
+	"github.com/vron/reporter"
 )
 
 // TODO: Implement checking of current status before accepting input
@@ -63,7 +64,7 @@ func (r *Report) ws(s string) {
 	r.seterr(e)
 }
 
-func New(w io.Writer, title string) *Report {
+func New(w io.Writer, title string) reporter.Report {
 	r := &Report{e: nil, w: w}
 	r.ws(`<!DOCTYPE html><html><head><link rel="stylesheet" type="text/css" href="style.css" /><title>`)
 	r.ws(html.EscapeString(title))
@@ -86,7 +87,7 @@ func (r *Report) Finish() []error {
 	return r.e
 }
 
-func (r *Report) Section() *Report {
+func (r *Report) Section() reporter.Report {
 	switch r.s.peek() {
 	case s_body, s_head1, s_head2, s_head3, s_head4:
 		r.s.push(r.s.peek() + 1)
@@ -99,7 +100,7 @@ func (r *Report) Section() *Report {
 	}
 	return r
 }
-func (r *Report) Figure() *Report {
+func (r *Report) Figure() reporter.Report {
 	switch r.s.peek() {
 	case s_body, s_head1, s_head2, s_head3, s_head4:
 		r.ws("<figure>\n")
@@ -109,7 +110,7 @@ func (r *Report) Figure() *Report {
 	}
 	return r
 }
-func (r *Report) Table() *Report {
+func (r *Report) Table() reporter.Report {
 	switch r.s.peek() {
 	case s_body, s_head1, s_head2, s_head3, s_head4, s_head5, s_fig:
 		r.ws("<table>\n")
@@ -119,7 +120,7 @@ func (r *Report) Table() *Report {
 	}
 	return r
 }
-func (r *Report) Row() *Report {
+func (r *Report) Row() reporter.Report {
 	switch r.s.peek() {
 	case s_tbl:
 		r.ws("<tr>\n")
@@ -129,7 +130,7 @@ func (r *Report) Row() *Report {
 	}
 	return r
 }
-func (r *Report) Cell(str string) *Report {
+func (r *Report) Cell(str string) reporter.Report {
 	switch r.s.peek() {
 	case s_tblrow:
 		r.ws("<tc>" + html.EscapeString(str) + "</tc>")
@@ -139,7 +140,7 @@ func (r *Report) Cell(str string) *Report {
 	return r
 }
 
-func (r *Report) End() *Report {
+func (r *Report) End() reporter.Report {
 	switch r.s.peek() {
 	case s_body:
 		r.seterr(errors.New("Allready in body mode"))
@@ -161,7 +162,7 @@ func (r *Report) End() *Report {
 	}
 	return r
 }
-func (r *Report) Heading(str ...interface{}) *Report {
+func (r *Report) Heading(str ...interface{}) reporter.Report {
 	switch r.s.peek() {
 	case s_body, s_head1, s_head2, s_head3, s_head4, s_head5:
 		r.ws("<h" + strconv.Itoa(int(r.s.peek()+1)) + ">")
@@ -172,7 +173,7 @@ func (r *Report) Heading(str ...interface{}) *Report {
 	}
 	return r
 }
-func (r *Report) Paragraph(str ...interface{}) *Report {
+func (r *Report) Paragraph(str ...interface{}) reporter.Report {
 	switch r.s.peek() {
 	case s_body, s_head1, s_head2, s_head3, s_head4, s_head5:
 		r.ws("<p>")
@@ -183,7 +184,7 @@ func (r *Report) Paragraph(str ...interface{}) *Report {
 	}
 	return r
 }
-func (r *Report) Caption(str ...interface{}) *Report {
+func (r *Report) Caption(str ...interface{}) reporter.Report {
 	switch r.s.peek() {
 	case s_fig:
 		r.ws("<figcaption>")
